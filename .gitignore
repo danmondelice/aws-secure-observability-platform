@@ -1,0 +1,41 @@
+# Terraform working data and local plans
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.auto.tfvars
+*.auto.tfvars.json
+terraform.tfvars
+
+# Raw evidence may contain account and network identifiers
+evidence/raw/
+evidence/screenshots/
+evidence/**/*.json
+evidence/**/*.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/
