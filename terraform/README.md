@@ -18,6 +18,8 @@ The observability tier installs the CloudWatch Agent on EC2, collects structured
 
 The audit tier captures all VPC accepted and rejected flows in an enriched one-minute format. A multi-Region CloudTrail records read and write management events plus global-service events, validates log-file integrity, writes to a KMS-encrypted and versioned S3 bucket, and also streams events to CloudWatch Logs. The audit bucket blocks public access, denies non-TLS requests, records server access logs in a separate bucket, transitions records to Glacier Instant Retrieval after 90 days, and defaults to one-year retention. Metric filters alert on security-group changes and CloudTrail configuration changes.
 
+The application edge uses a regional AWS WAF web ACL associated with the ALB. AWS-managed SQL injection, core, and known-bad-input rule groups block matching requests before a per-IP one-minute rate rule. Detailed logs retain only blocked requests, redact query strings and authorization headers, disable request sampling, and use the observability KMS key. WAF allowed/blocked metrics, recent blocks, and a blocked-request alarm appear in the operations dashboard.
+
 With no `certificate_arn`, the disposable lab listener serves HTTP. Supplying a same-Region ACM certificate enables HTTPS and changes HTTP to a permanent redirect. Do not describe the deployment as TLS-protected until that certificate path has been applied and tested.
 
 ## Validate
@@ -33,4 +35,4 @@ Copy `terraform.tfvars.example` to an ignored `terraform.tfvars` only when value
 
 Running `terraform plan` or `terraform apply` requires valid temporary AWS credentials. Review the plan and expected NAT gateway costs before applying.
 
-Also review Multi-AZ RDS, backup storage, KMS, Secrets Manager, CloudWatch Logs, CloudTrail, S3, and archival-storage costs. General-query logging and one-minute VPC Flow Logs are intentionally enabled for this evidence-driven lab and should be adjusted when their diagnostic value does not justify the volume.
+Also review Multi-AZ RDS, backup storage, KMS, Secrets Manager, CloudWatch Logs, CloudTrail, S3, archival storage, and AWS WAF costs. General-query logging and one-minute VPC Flow Logs are intentionally enabled for this evidence-driven lab and should be adjusted when their diagnostic value does not justify the volume.

@@ -10,11 +10,11 @@ The project demonstrates more than resource deployment: every material security 
 
 ## Status
 
-Phase 7 — VPC Flow Logs and hardened CloudTrail audit logging.
+Phase 8 — AWS WAF protection and controlled validation tooling.
 
 No AWS resources have been created yet.
 
-The current Terraform configuration defines the multi-AZ application platform, encrypted operational telemetry, VPC network-flow visibility, and a multi-Region management-event audit trail. It has not been applied to AWS.
+The current Terraform configuration defines the multi-AZ application platform, encrypted operational telemetry, network and management-event audit trails, and regional WAF protection for the ALB. It has not been applied to AWS.
 
 ## Planned architecture
 
@@ -69,6 +69,8 @@ See [docs/requirements.md](docs/requirements.md), [docs/control-validation-matri
 Use the [interview guide](docs/interview-guide.md) to practice the project story, design decisions, evidence pattern, and questions interviewers are likely to ask.
 
 Use the [network and audit investigation runbook](docs/audit-investigation.md) after deployment to validate CloudTrail delivery, attribute a reversible configuration change, and locate a controlled rejected connection.
+
+Use the [WAF validation runbook](docs/waf-testing.md) only after deployment and only against this owned lab. Its scripts enforce explicit confirmation and bounded traffic.
 
 ## Local application
 

@@ -38,6 +38,7 @@ locals {
     aws_cloudwatch_metric_alarm.rds_free_storage.arn,
     aws_cloudwatch_metric_alarm.security_group_changes.arn,
     aws_cloudwatch_metric_alarm.cloudtrail_changes.arn,
+    aws_cloudwatch_metric_alarm.waf_blocked_requests.arn,
   ]
 }
 
@@ -424,6 +425,36 @@ resource "aws_cloudwatch_dashboard" "operations" {
           region = var.aws_region
           view   = "table"
           query  = "SOURCE '${local.cloudtrail_log_group_name}' | fields @timestamp, userIdentity.arn as actor, eventSource, eventName, sourceIPAddress, errorCode | filter eventName like /^(Create|Delete|Update|Modify|Put|Authorize|Revoke|Start|Stop)/ | sort @timestamp desc | limit 50"
+        }
+      },
+      {
+        type   = "metric"
+        x      = 0
+        y      = 30
+        width  = 12
+        height = 6
+        properties = {
+          title  = "WAF request decisions"
+          region = var.aws_region
+          period = 60
+          stat   = "Sum"
+          metrics = [
+            ["AWS/WAFV2", "AllowedRequests", "WebACL", aws_wafv2_web_acl.app.name, "Region", var.aws_region, "Rule", "ALL", { label = "Allowed" }],
+            [".", "BlockedRequests", ".", ".", ".", ".", ".", ".", { label = "Blocked", yAxis = "right" }],
+          ]
+        }
+      },
+      {
+        type   = "log"
+        x      = 12
+        y      = 30
+        width  = 12
+        height = 6
+        properties = {
+          title  = "Recent WAF blocks"
+          region = var.aws_region
+          view   = "table"
+          query  = "SOURCE '${local.waf_log_group_name}' | fields @timestamp, action, terminatingRuleId, httpRequest.clientIp, httpRequest.country, httpRequest.httpMethod, httpRequest.uri | filter action = 'BLOCK' | sort @timestamp desc | limit 50"
         }
       },
     ]

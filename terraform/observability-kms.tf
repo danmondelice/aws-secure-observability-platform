@@ -37,6 +37,7 @@ data "aws_iam_policy_document" "observability_kms" {
       values = [
         "arn:${data.aws_partition.current.partition}:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/ec2/${var.project_name}/${var.environment}/*",
         "arn:${data.aws_partition.current.partition}:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/rds/instance/${local.physical_name_prefix}-mysql/*",
+        "arn:${data.aws_partition.current.partition}:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:${local.waf_log_group_name}",
       ]
     }
 

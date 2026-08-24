@@ -8,6 +8,7 @@ database_multi_az       = true
 log_retention_days      = 30
 audit_log_retention_days        = 365
 audit_access_log_retention_days = 90
+waf_rate_limit                  = 100
 
 # Optional. Confirm the subscription email after apply.
 # alert_email = "you@example.com"

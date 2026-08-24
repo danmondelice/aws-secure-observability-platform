@@ -40,7 +40,8 @@ Use this order:
 | 5 | RDS, Secrets Manager, KMS | Private encrypted data and credential lifecycle | Managed password, exact-secret IAM, KMS service/context restrictions |
 | 6 | CloudWatch and SNS | Detection, investigation, and notification | Encrypted logs/topic, dashboard, M-of-N alarms, explicit missing-data policy |
 | 7 | VPC Flow Logs and CloudTrail | Network evidence and management-plane accountability | Encrypted flow/audit logs, integrity validation, change alarms, and investigation queries |
-| Later | WAF, Config, GuardDuty, Security Hub | Prevention, drift detection, and threat findings | Controlled experiments with timestamps and redacted artifacts |
+| 8 | AWS WAF | Edge prevention and application-layer evidence | Normal 200, controlled 403 responses, terminating rules, metrics, alarm, and redacted logs |
+| Later | Config, GuardDuty, Security Hub | Drift detection and threat findings | Controlled experiments with timestamps and redacted artifacts |
 
 ### Phase 7 interview steps
 
@@ -51,6 +52,16 @@ Remember **Capture → Protect → Detect → Investigate → Attribute**:
 3. **Detect:** CloudWatch metric filters and SNS-backed alarms identify security-group changes and CloudTrail configuration changes.
 4. **Investigate:** Logs Insights narrows activity by time, event, actor, source IP, error, interface, port, and ACCEPT/REJECT result.
 5. **Attribute:** CloudTrail's identity, API, Region, time, request parameters, and source address establish who changed what and when.
+
+### Phase 8 interview steps
+
+Remember **Baseline → Send → Block → Correlate → Tune**:
+
+1. **Baseline:** prove a normal request remains available and record the starting WAF metrics.
+2. **Send:** issue one bounded, harmless encoded SQLi or XSS pattern, or a capped sequential rate test.
+3. **Block:** observe HTTP 403; do not attempt exploitation, bypass, or third-party testing.
+4. **Correlate:** match the UTC window to the terminating rule, encrypted redacted log, WAF metric, alarm, and SNS notification.
+5. **Tune:** discuss false positives, approximate rate enforcement, rule order, and using Count mode before blocking new rules in production.
 
 ## Design decisions interviewers may ask about
 

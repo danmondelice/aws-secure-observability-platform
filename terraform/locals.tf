@@ -20,6 +20,7 @@ locals {
   system_log_group_name      = "/aws/ec2/${var.project_name}/${var.environment}/system"
   flow_log_group_name        = "/aws/vpc/${var.project_name}/${var.environment}/flow-logs"
   cloudtrail_log_group_name  = "/aws/cloudtrail/${var.project_name}/${var.environment}/management"
+  waf_log_group_name         = "aws-waf-logs-${local.physical_name_prefix}-web-acl"
   notification_topic_name    = "${local.physical_name_prefix}-operations-alerts"
   cloudtrail_name            = "${local.physical_name_prefix}-management-trail"
   audit_bucket_name          = "${local.physical_name_prefix}-audit-${data.aws_caller_identity.current.account_id}-${var.aws_region}"

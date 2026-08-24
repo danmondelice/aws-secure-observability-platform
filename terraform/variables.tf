@@ -265,3 +265,14 @@ variable "audit_access_log_retention_days" {
     error_message = "audit_access_log_retention_days must be at least 30 days."
   }
 }
+
+variable "waf_rate_limit" {
+  description = "Per-IP request threshold evaluated over one minute by the WAF rate-based rule."
+  type        = number
+  default     = 100
+
+  validation {
+    condition     = var.waf_rate_limit >= 100 && var.waf_rate_limit <= 2000
+    error_message = "waf_rate_limit must be between 100 and 2000 requests per minute for this bounded lab."
+  }
+}
