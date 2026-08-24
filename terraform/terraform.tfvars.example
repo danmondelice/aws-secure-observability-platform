@@ -1,0 +1,8 @@
+aws_region       = "us-east-2"
+environment      = "lab"
+owner            = "danmondelice"
+nat_gateway_mode = "per_az"
+
+additional_tags = {
+  CostCenter = "portfolio-lab"
+}

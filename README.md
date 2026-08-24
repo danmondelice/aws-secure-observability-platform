@@ -10,9 +10,11 @@ The project demonstrates more than resource deployment: every material security 
 
 ## Status
 
-Phase 2 — Flask application and local tests.
+Phase 3 — Terraform network foundation.
 
 No AWS resources have been created yet.
+
+The current Terraform configuration defines the multi-AZ VPC, subnet tiers, routing, NAT gateways, and tier-specific security groups. It has not been applied to AWS.
 
 ## Planned architecture
 
