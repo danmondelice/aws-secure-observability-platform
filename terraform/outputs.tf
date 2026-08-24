@@ -56,3 +56,19 @@ output "launch_template_id" {
   description = "Application EC2 launch template ID."
   value       = aws_launch_template.app.id
 }
+
+output "database_endpoint" {
+  description = "Private RDS endpoint without credentials."
+  value       = aws_db_instance.app.endpoint
+}
+
+output "database_secret_arn" {
+  description = "ARN of the RDS-managed master-user secret. The secret value is never output."
+  value       = aws_db_instance.app.master_user_secret[0].secret_arn
+  sensitive   = true
+}
+
+output "database_kms_key_arn" {
+  description = "KMS key used for RDS storage and its managed secret."
+  value       = aws_kms_key.database.arn
+}

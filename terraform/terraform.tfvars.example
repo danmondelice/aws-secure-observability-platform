@@ -3,6 +3,8 @@ environment      = "lab"
 owner            = "danmondelice"
 nat_gateway_mode = "per_az"
 instance_type    = "t4g.micro"
+database_instance_class = "db.t4g.micro"
+database_multi_az       = true
 
 # Set only after issuing an ACM certificate in this Region.
 # certificate_arn = "arn:aws:acm:us-east-2:123456789012:certificate/00000000-0000-0000-0000-000000000000"

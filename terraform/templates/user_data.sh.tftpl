@@ -36,6 +36,11 @@ WorkingDirectory=/opt/aws-secure-observability-platform/source
 Environment=APP_BIND=0.0.0.0:${app_port}
 Environment=ENABLE_FAILURE_ENDPOINTS=false
 Environment=LOG_LEVEL=INFO
+Environment=AWS_REGION=${aws_region}
+Environment=DB_HOST=${database_host}
+Environment=DB_PORT=${database_port}
+Environment=DB_NAME=${database_name}
+Environment=DB_SECRET_ARN=${database_secret_arn}
 ExecStart=/opt/aws-secure-observability-platform/venv/bin/gunicorn --config app/gunicorn.conf.py app.app:app
 Restart=always
 RestartSec=5

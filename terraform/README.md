@@ -12,6 +12,8 @@ The default `per_az` NAT mode favors resiliency by routing each application subn
 
 The compute tier adds an Application Load Balancer and two-instance EC2 Auto Scaling group. Instances use an immutable Amazon Linux 2023 Arm64 AMI reference, required IMDSv2, encrypted EBS, standard burst credits, detailed monitoring, and Session Manager instead of SSH. The ASG uses ELB health replacement, target tracking, and rolling instance refresh.
 
+The database tier uses private isolated subnets, encrypted MySQL 8.4 Multi-AZ RDS, seven-day backups, storage autoscaling, IAM database authentication support, and error/general/slow-query log exports. RDS generates its master password directly in Secrets Manager under a rotating KMS key, so Terraform never receives a plaintext password. See the [database credential ADR](../docs/architecture-decisions/0001-database-credential-lifecycle.md) for the required application-user hardening step.
+
 With no `certificate_arn`, the disposable lab listener serves HTTP. Supplying a same-Region ACM certificate enables HTTPS and changes HTTP to a permanent redirect. Do not describe the deployment as TLS-protected until that certificate path has been applied and tested.
 
 ## Validate
@@ -26,3 +28,5 @@ terraform plan
 Copy `terraform.tfvars.example` to an ignored `terraform.tfvars` only when values need to be overridden. Do not place credentials or secret values in Terraform variable files.
 
 Running `terraform plan` or `terraform apply` requires valid temporary AWS credentials. Review the plan and expected NAT gateway costs before applying.
+
+Also review Multi-AZ RDS, backup storage, KMS, Secrets Manager, and CloudWatch Logs costs. General-query logging is intentionally enabled for this evidence-driven lab and should be disabled when its diagnostic value does not justify the volume.

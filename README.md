@@ -10,11 +10,11 @@ The project demonstrates more than resource deployment: every material security 
 
 ## Status
 
-Phase 4 — ALB and private EC2 Auto Scaling application tier.
+Phase 5 — private RDS, Secrets Manager, and KMS controls.
 
 No AWS resources have been created yet.
 
-The current Terraform configuration defines the multi-AZ network, public ALB, and private Auto Scaling application tier. It has not been applied to AWS.
+The current Terraform configuration defines the multi-AZ network, public ALB, private Auto Scaling application tier, and encrypted private RDS database with RDS-managed credentials. It has not been applied to AWS.
 
 ## Planned architecture
 

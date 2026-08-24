@@ -45,6 +45,11 @@ resource "aws_launch_template" "app" {
   user_data = base64encode(templatefile("${path.module}/templates/user_data.sh.tftpl", {
     app_port            = var.app_port
     application_git_ref = var.application_git_ref
+    aws_region          = var.aws_region
+    database_host       = aws_db_instance.app.address
+    database_name       = var.database_name
+    database_port       = var.database_port
+    database_secret_arn = aws_db_instance.app.master_user_secret[0].secret_arn
   }))
 
   tag_specifications {
@@ -68,6 +73,11 @@ resource "aws_launch_template" "app" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [
+    aws_iam_role_policy.app_database_secret,
+    aws_iam_role_policy_attachment.ssm_managed_instance_core,
+  ]
 }
 
 resource "aws_autoscaling_group" "app" {

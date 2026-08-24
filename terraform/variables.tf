@@ -149,3 +149,71 @@ variable "enable_deletion_protection" {
   type        = bool
   default     = false
 }
+
+variable "database_engine_version" {
+  description = "Pinned MySQL engine version verified in the target Region."
+  type        = string
+  default     = "8.4.9"
+
+  validation {
+    condition     = can(regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", var.database_engine_version))
+    error_message = "database_engine_version must be a full semantic engine version such as 8.4.9."
+  }
+}
+
+variable "database_instance_class" {
+  description = "RDS instance class for the lab database."
+  type        = string
+  default     = "db.t4g.micro"
+
+  validation {
+    condition     = startswith(var.database_instance_class, "db.")
+    error_message = "database_instance_class must start with db."
+  }
+}
+
+variable "database_name" {
+  description = "Initial application database name."
+  type        = string
+  default     = "secureapp"
+
+  validation {
+    condition     = can(regex("^[A-Za-z][A-Za-z0-9_]{0,63}$", var.database_name))
+    error_message = "database_name must start with a letter and contain at most 64 letters, digits, or underscores."
+  }
+}
+
+variable "database_master_username" {
+  description = "RDS master username. The password is generated and managed by RDS in Secrets Manager."
+  type        = string
+  default     = "platformadmin"
+
+  validation {
+    condition     = can(regex("^[A-Za-z][A-Za-z0-9_]{0,15}$", var.database_master_username))
+    error_message = "database_master_username must start with a letter and contain at most 16 letters, digits, or underscores."
+  }
+}
+
+variable "database_multi_az" {
+  description = "Deploy a synchronous Multi-AZ standby. Keep true for availability testing."
+  type        = bool
+  default     = true
+}
+
+variable "enable_database_query_logging" {
+  description = "Export the MySQL general query log. Useful for the lab but increases CloudWatch log volume."
+  type        = bool
+  default     = true
+}
+
+variable "database_deletion_protection" {
+  description = "Protect the RDS instance from deletion. Must be true for environment=prod."
+  type        = bool
+  default     = false
+}
+
+variable "database_skip_final_snapshot" {
+  description = "Skip a final snapshot during deletion. Suitable only for a disposable lab."
+  type        = bool
+  default     = true
+}
