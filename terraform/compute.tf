@@ -50,6 +50,11 @@ resource "aws_launch_template" "app" {
     database_name       = var.database_name
     database_port       = var.database_port
     database_secret_arn = aws_db_instance.app.master_user_secret[0].secret_arn
+    cloudwatch_agent_config_b64 = base64encode(templatefile("${path.module}/cloudwatch-agent.json.tftpl", {
+      application_log_group_name = local.application_log_group_name
+      bootstrap_log_group_name   = local.bootstrap_log_group_name
+      system_log_group_name      = local.system_log_group_name
+    }))
   }))
 
   tag_specifications {
@@ -75,6 +80,10 @@ resource "aws_launch_template" "app" {
   }
 
   depends_on = [
+    aws_cloudwatch_log_group.application,
+    aws_cloudwatch_log_group.bootstrap,
+    aws_cloudwatch_log_group.system,
+    aws_iam_role_policy.cloudwatch_agent,
     aws_iam_role_policy.app_database_secret,
     aws_iam_role_policy_attachment.ssm_managed_instance_core,
   ]

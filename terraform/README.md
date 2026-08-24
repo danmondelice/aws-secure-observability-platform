@@ -14,6 +14,8 @@ The compute tier adds an Application Load Balancer and two-instance EC2 Auto Sca
 
 The database tier uses private isolated subnets, encrypted MySQL 8.4 Multi-AZ RDS, seven-day backups, storage autoscaling, IAM database authentication support, and error/general/slow-query log exports. RDS generates its master password directly in Secrets Manager under a rotating KMS key, so Terraform never receives a plaintext password. See the [database credential ADR](../docs/architecture-decisions/0001-database-credential-lifecycle.md) for the required application-user hardening step.
 
+The observability tier installs the CloudWatch Agent on EC2, collects structured application/bootstrap/system logs and aggregate CPU/memory/disk metrics, encrypts log groups with a project KMS key, and displays ALB, ASG, host, RDS, alarm, and error-log views on an eight-hour operations dashboard. M-of-N alarms use explicit missing-data behavior and publish ALARM/OK transitions to a separately encrypted SNS topic.
+
 With no `certificate_arn`, the disposable lab listener serves HTTP. Supplying a same-Region ACM certificate enables HTTPS and changes HTTP to a permanent redirect. Do not describe the deployment as TLS-protected until that certificate path has been applied and tested.
 
 ## Validate

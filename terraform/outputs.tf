@@ -72,3 +72,13 @@ output "database_kms_key_arn" {
   description = "KMS key used for RDS storage and its managed secret."
   value       = aws_kms_key.database.arn
 }
+
+output "operations_dashboard_name" {
+  description = "CloudWatch operations dashboard name."
+  value       = aws_cloudwatch_dashboard.operations.dashboard_name
+}
+
+output "operations_topic_arn" {
+  description = "Encrypted SNS topic for operational alarm transitions."
+  value       = aws_sns_topic.operations.arn
+}

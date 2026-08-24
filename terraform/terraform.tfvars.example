@@ -5,6 +5,10 @@ nat_gateway_mode = "per_az"
 instance_type    = "t4g.micro"
 database_instance_class = "db.t4g.micro"
 database_multi_az       = true
+log_retention_days      = 30
+
+# Optional. Confirm the subscription email after apply.
+# alert_email = "you@example.com"
 
 # Set only after issuing an ACM certificate in this Region.
 # certificate_arn = "arn:aws:acm:us-east-2:123456789012:certificate/00000000-0000-0000-0000-000000000000"

@@ -15,6 +15,11 @@ locals {
   primary_az      = local.availability_zones[0]
   vpc_resolver_ip = "${cidrhost(var.vpc_cidr, 2)}/32"
 
+  application_log_group_name = "/aws/ec2/${var.project_name}/${var.environment}/application"
+  bootstrap_log_group_name   = "/aws/ec2/${var.project_name}/${var.environment}/bootstrap"
+  system_log_group_name      = "/aws/ec2/${var.project_name}/${var.environment}/system"
+  notification_topic_name    = "${local.physical_name_prefix}-operations-alerts"
+
   common_tags = merge(
     {
       Project     = var.project_name

@@ -67,3 +67,41 @@ resource "aws_iam_role_policy" "app_database_secret" {
   role   = aws_iam_role.app.id
   policy = data.aws_iam_policy_document.app_database_secret.json
 }
+
+data "aws_iam_policy_document" "cloudwatch_agent" {
+  statement {
+    sid    = "WriteProjectLogStreams"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:DescribeLogStreams",
+      "logs:PutLogEvents",
+    ]
+    resources = flatten([
+      for log_group in [
+        aws_cloudwatch_log_group.application,
+        aws_cloudwatch_log_group.bootstrap,
+        aws_cloudwatch_log_group.system,
+      ] : [log_group.arn, "${log_group.arn}:log-stream:*"]
+    ])
+  }
+
+  statement {
+    sid       = "PublishCloudWatchAgentMetrics"
+    effect    = "Allow"
+    actions   = ["cloudwatch:PutMetricData"]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "cloudwatch:namespace"
+      values   = ["CWAgent"]
+    }
+  }
+}
+
+resource "aws_iam_role_policy" "cloudwatch_agent" {
+  name   = "publish-project-telemetry"
+  role   = aws_iam_role.app.id
+  policy = data.aws_iam_policy_document.cloudwatch_agent.json
+}

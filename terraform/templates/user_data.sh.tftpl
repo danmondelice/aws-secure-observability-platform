@@ -8,9 +8,10 @@ readonly source_dir="$app_root/source"
 readonly archive_path="/tmp/application.tar.gz"
 readonly archive_url="https://github.com/danmondelice/aws-secure-observability-platform/archive/${application_git_ref}.tar.gz"
 
-dnf install -y python3 python3-pip curl tar gzip
+dnf install -y amazon-cloudwatch-agent python3 python3-pip curl tar gzip
 
 install -d -m 0755 "$source_dir"
+install -d -m 0755 /var/log/aws-secure-observability
 curl --fail --silent --show-error --location --retry 5 --retry-delay 2 \
   --output "$archive_path" "$archive_url"
 tar -xzf "$archive_path" --strip-components=1 -C "$source_dir"
@@ -42,6 +43,8 @@ Environment=DB_PORT=${database_port}
 Environment=DB_NAME=${database_name}
 Environment=DB_SECRET_ARN=${database_secret_arn}
 ExecStart=/opt/aws-secure-observability-platform/venv/bin/gunicorn --config app/gunicorn.conf.py app.app:app
+StandardOutput=append:/var/log/aws-secure-observability/application.log
+StandardError=append:/var/log/aws-secure-observability/application.log
 Restart=always
 RestartSec=5
 NoNewPrivileges=true
@@ -56,3 +59,11 @@ UNIT
 
 systemctl daemon-reload
 systemctl enable --now aws-secure-observability-app.service
+
+printf '%s' '${cloudwatch_agent_config_b64}' | base64 --decode \
+  > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+  -a fetch-config \
+  -m ec2 \
+  -s \
+  -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json

@@ -10,11 +10,11 @@ The project demonstrates more than resource deployment: every material security 
 
 ## Status
 
-Phase 5 — private RDS, Secrets Manager, and KMS controls.
+Phase 6 — CloudWatch telemetry, dashboard, alarms, and encrypted SNS notifications.
 
 No AWS resources have been created yet.
 
-The current Terraform configuration defines the multi-AZ network, public ALB, private Auto Scaling application tier, and encrypted private RDS database with RDS-managed credentials. It has not been applied to AWS.
+The current Terraform configuration defines the multi-AZ application platform plus its encrypted logging, metrics, dashboard, alarms, and notification pipeline. It has not been applied to AWS.
 
 ## Planned architecture
 
@@ -65,6 +65,8 @@ Each experiment records:
 - remediation and retest when a control fails.
 
 See [docs/requirements.md](docs/requirements.md), [docs/control-validation-matrix.md](docs/control-validation-matrix.md), and [ISSUES.md](ISSUES.md).
+
+Use the [interview guide](docs/interview-guide.md) to practice the project story, design decisions, evidence pattern, and questions interviewers are likely to ask.
 
 ## Local application
 

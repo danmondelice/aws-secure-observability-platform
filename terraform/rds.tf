@@ -95,4 +95,6 @@ resource "aws_db_instance" "app" {
       error_message = "Production requires database deletion protection and a final snapshot."
     }
   }
+
+  depends_on = [aws_cloudwatch_log_group.rds]
 }
