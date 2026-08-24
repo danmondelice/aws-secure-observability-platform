@@ -1,6 +1,7 @@
 locals {
-  name_prefix        = "${var.project_name}-${var.environment}"
-  availability_zones = slice(data.aws_availability_zones.available.names, 0, 2)
+  name_prefix          = "${var.project_name}-${var.environment}"
+  physical_name_prefix = "asop-${var.environment}"
+  availability_zones   = slice(data.aws_availability_zones.available.names, 0, 2)
 
   subnet_configuration = {
     for index, az in local.availability_zones : az => {

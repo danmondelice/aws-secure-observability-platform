@@ -91,3 +91,61 @@ variable "additional_tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "instance_type" {
+  description = "EC2 instance type for the application Auto Scaling group."
+  type        = string
+  default     = "t4g.micro"
+
+  validation {
+    condition     = can(regex("^[a-z][a-z0-9]*[0-9][a-z]*\\.[a-z0-9]+$", var.instance_type))
+    error_message = "instance_type must be a valid EC2 instance type identifier."
+  }
+}
+
+variable "asg_min_size" {
+  description = "Minimum application instance count."
+  type        = number
+  default     = 2
+}
+
+variable "asg_desired_capacity" {
+  description = "Normal application instance count."
+  type        = number
+  default     = 2
+}
+
+variable "asg_max_size" {
+  description = "Maximum application instance count."
+  type        = number
+  default     = 4
+}
+
+variable "application_git_ref" {
+  description = "Immutable Git commit used to bootstrap the application."
+  type        = string
+  default     = "c19a8f0ddf960d3d32513e456ddd5e547ffe8597"
+
+  validation {
+    condition     = can(regex("^[0-9a-f]{40}$", var.application_git_ref))
+    error_message = "application_git_ref must be a full 40-character Git commit SHA."
+  }
+}
+
+variable "certificate_arn" {
+  description = "Optional ACM certificate ARN. When null, the lab exposes HTTP only; when set, HTTP redirects to HTTPS."
+  type        = string
+  default     = null
+  nullable    = true
+
+  validation {
+    condition     = var.certificate_arn == null || can(regex("^arn:aws(-[a-z]+)?:acm:[a-z0-9-]+:[0-9]{12}:certificate/[0-9a-f-]+$", var.certificate_arn))
+    error_message = "certificate_arn must be null or a valid ACM certificate ARN."
+  }
+}
+
+variable "enable_deletion_protection" {
+  description = "Protect the ALB from accidental deletion. Disabled by default for a disposable lab."
+  type        = bool
+  default     = false
+}

@@ -10,11 +10,11 @@ The project demonstrates more than resource deployment: every material security 
 
 ## Status
 
-Phase 3 — Terraform network foundation.
+Phase 4 — ALB and private EC2 Auto Scaling application tier.
 
 No AWS resources have been created yet.
 
-The current Terraform configuration defines the multi-AZ VPC, subnet tiers, routing, NAT gateways, and tier-specific security groups. It has not been applied to AWS.
+The current Terraform configuration defines the multi-AZ network, public ALB, and private Auto Scaling application tier. It has not been applied to AWS.
 
 ## Planned architecture
 

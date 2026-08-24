@@ -18,7 +18,7 @@ resource "aws_security_group" "alb" {
 
 resource "aws_vpc_security_group_ingress_rule" "alb_http" {
   security_group_id = aws_security_group.alb.id
-  description       = "Public HTTP for redirect to HTTPS"
+  description       = "Public HTTP; redirected when an ACM certificate is configured"
   ip_protocol       = "tcp"
   from_port         = 80
   to_port           = 80
@@ -26,6 +26,8 @@ resource "aws_vpc_security_group_ingress_rule" "alb_http" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "alb_https" {
+  count = var.certificate_arn == null ? 0 : 1
+
   security_group_id = aws_security_group.alb.id
   description       = "Public HTTPS application traffic"
   ip_protocol       = "tcp"

@@ -36,3 +36,23 @@ output "nat_gateway_mode" {
   description = "Selected NAT gateway topology."
   value       = var.nat_gateway_mode
 }
+
+output "alb_dns_name" {
+  description = "Public DNS name of the Application Load Balancer."
+  value       = aws_lb.app.dns_name
+}
+
+output "alb_url" {
+  description = "Application URL using HTTPS when a certificate is configured."
+  value       = "${var.certificate_arn == null ? "http" : "https"}://${aws_lb.app.dns_name}"
+}
+
+output "autoscaling_group_name" {
+  description = "Application Auto Scaling group name."
+  value       = aws_autoscaling_group.app.name
+}
+
+output "launch_template_id" {
+  description = "Application EC2 launch template ID."
+  value       = aws_launch_template.app.id
+}
