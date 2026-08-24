@@ -112,3 +112,23 @@ output "waf_log_group_name" {
   description = "CloudWatch Logs group receiving blocked-request WAF logs."
   value       = aws_cloudwatch_log_group.waf.name
 }
+
+output "guardduty_detector_id" {
+  description = "GuardDuty detector identifier used for read-only verification and approved sample-finding tests."
+  value       = aws_guardduty_detector.main.id
+}
+
+output "security_topic_arn" {
+  description = "Encrypted SNS topic for filtered security findings."
+  value       = aws_sns_topic.security.arn
+}
+
+output "security_events_dlq_url" {
+  description = "Encrypted dead-letter queue URL for failed EventBridge security deliveries."
+  value       = aws_sqs_queue.security_events_dlq.id
+}
+
+output "config_recorder_name" {
+  description = "AWS Config recorder name."
+  value       = aws_config_configuration_recorder.main.name
+}

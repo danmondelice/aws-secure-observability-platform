@@ -88,6 +88,33 @@ data "aws_iam_policy_document" "audit_kms" {
       values   = ["logs.${var.aws_region}.amazonaws.com"]
     }
   }
+
+  statement {
+    sid    = "AllowAWSConfigDelivery"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+    ]
+    resources = ["*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["config.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:${data.aws_partition.current.partition}:config:${var.aws_region}:${data.aws_caller_identity.current.account_id}:*"]
+    }
+  }
 }
 
 resource "aws_kms_key" "audit" {

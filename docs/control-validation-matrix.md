@@ -13,6 +13,7 @@ Status values: `planned`, `pass`, `fail`, `blocked`, or `not-run`.
 | SEC-02 | XSS patterns are blocked | Send a benign encoded XSS test string | HTTP 403 and matching WAF log | planned |
 | SEC-03 | Excessive requests are rate-limited | Run a bounded request burst above the configured threshold | Allowed/blocked counts and WAF log | planned |
 | SEC-04 | Supported threat simulations alert | Generate AWS-supported GuardDuty sample findings | Finding and routed notification | planned |
+| SEC-05 | Actionable posture findings are centralized | Observe an active failed medium-or-higher FSBP control finding | Security Hub finding and sanitized routed notification | planned |
 | AUD-01 | Management changes are attributable | Make one documented reversible lab configuration change | CloudTrail principal, time, region, source, API, and parameters | planned |
 | CFG-01 | Public SSH drift is detected | Temporarily add a narrowly timed lab-only noncompliant rule and immediately revert it | Config transition, alert, rollback, and compliant state | planned |
 | ENC-01 | Data stores and telemetry are encrypted | Inspect RDS, EBS, secrets, logs, trail bucket, and SNS configuration | Configuration output with key identifiers redacted | planned |

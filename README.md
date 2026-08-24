@@ -10,11 +10,11 @@ The project demonstrates more than resource deployment: every material security 
 
 ## Status
 
-Phase 8 — AWS WAF protection and controlled validation tooling.
+Phase 9 — GuardDuty, AWS Config, Security Hub, and security-event routing.
 
 No AWS resources have been created yet.
 
-The current Terraform configuration defines the multi-AZ application platform, encrypted operational telemetry, network and management-event audit trails, and regional WAF protection for the ALB. It has not been applied to AWS.
+The current Terraform configuration defines the multi-AZ application platform, encrypted operational telemetry, audit trails, WAF protection, continuous configuration evaluation, threat detection, security posture management, and filtered security notifications. It has not been applied to AWS.
 
 ## Planned architecture
 
@@ -71,6 +71,8 @@ Use the [interview guide](docs/interview-guide.md) to practice the project story
 Use the [network and audit investigation runbook](docs/audit-investigation.md) after deployment to validate CloudTrail delivery, attribute a reversible configuration change, and locate a controlled rejected connection.
 
 Use the [WAF validation runbook](docs/waf-testing.md) only after deployment and only against this owned lab. Its scripts enforce explicit confirmation and bounded traffic.
+
+Use the [security detection and drift runbook](docs/security-detection.md) for read-only service verification and the evidence requirements for separately approved GuardDuty sample and Config drift exercises.
 
 ## Local application
 

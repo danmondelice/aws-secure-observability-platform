@@ -39,6 +39,9 @@ locals {
     aws_cloudwatch_metric_alarm.security_group_changes.arn,
     aws_cloudwatch_metric_alarm.cloudtrail_changes.arn,
     aws_cloudwatch_metric_alarm.waf_blocked_requests.arn,
+    aws_cloudwatch_metric_alarm.security_event_delivery["guardduty"].arn,
+    aws_cloudwatch_metric_alarm.security_event_delivery["config"].arn,
+    aws_cloudwatch_metric_alarm.security_event_delivery["securityhub"].arn,
   ]
 }
 
@@ -455,6 +458,27 @@ resource "aws_cloudwatch_dashboard" "operations" {
           region = var.aws_region
           view   = "table"
           query  = "SOURCE '${local.waf_log_group_name}' | fields @timestamp, action, terminatingRuleId, httpRequest.clientIp, httpRequest.country, httpRequest.httpMethod, httpRequest.uri | filter action = 'BLOCK' | sort @timestamp desc | limit 50"
+        }
+      },
+      {
+        type   = "metric"
+        x      = 0
+        y      = 36
+        width  = 24
+        height = 6
+        properties = {
+          title  = "Security event routing"
+          region = var.aws_region
+          period = 300
+          stat   = "Sum"
+          metrics = [
+            ["AWS/Events", "Invocations", "RuleName", aws_cloudwatch_event_rule.guardduty.name, { label = "GuardDuty routed" }],
+            [".", ".", ".", aws_cloudwatch_event_rule.config_noncompliant.name, { label = "Config routed" }],
+            [".", ".", ".", aws_cloudwatch_event_rule.securityhub.name, { label = "Security Hub routed" }],
+            [".", "FailedInvocations", ".", aws_cloudwatch_event_rule.guardduty.name, { label = "GuardDuty failed", yAxis = "right" }],
+            [".", ".", ".", aws_cloudwatch_event_rule.config_noncompliant.name, { label = "Config failed", yAxis = "right" }],
+            [".", ".", ".", aws_cloudwatch_event_rule.securityhub.name, { label = "Security Hub failed", yAxis = "right" }],
+          ]
         }
       },
     ]

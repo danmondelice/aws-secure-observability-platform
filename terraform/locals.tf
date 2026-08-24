@@ -22,6 +22,8 @@ locals {
   cloudtrail_log_group_name  = "/aws/cloudtrail/${var.project_name}/${var.environment}/management"
   waf_log_group_name         = "aws-waf-logs-${local.physical_name_prefix}-web-acl"
   notification_topic_name    = "${local.physical_name_prefix}-operations-alerts"
+  security_topic_name        = "${local.physical_name_prefix}-security-alerts"
+  security_dlq_name          = "${local.physical_name_prefix}-security-events-dlq"
   cloudtrail_name            = "${local.physical_name_prefix}-management-trail"
   audit_bucket_name          = "${local.physical_name_prefix}-audit-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
   audit_access_bucket_name   = "${local.physical_name_prefix}-audit-access-${data.aws_caller_identity.current.account_id}-${var.aws_region}"

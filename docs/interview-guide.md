@@ -41,7 +41,8 @@ Use this order:
 | 6 | CloudWatch and SNS | Detection, investigation, and notification | Encrypted logs/topic, dashboard, M-of-N alarms, explicit missing-data policy |
 | 7 | VPC Flow Logs and CloudTrail | Network evidence and management-plane accountability | Encrypted flow/audit logs, integrity validation, change alarms, and investigation queries |
 | 8 | AWS WAF | Edge prevention and application-layer evidence | Normal 200, controlled 403 responses, terminating rules, metrics, alarm, and redacted logs |
-| Later | Config, GuardDuty, Security Hub | Drift detection and threat findings | Controlled experiments with timestamps and redacted artifacts |
+| 9 | GuardDuty, Config, Security Hub, EventBridge | Threat detection, drift detection, posture, and alert routing | Read-only state checks plus approved sample/drift evidence and delivery health |
+| Later | Failure, recovery, authorization, metadata, and network tests | Operational proof across the complete platform | Controlled experiments with timestamps and redacted artifacts |
 
 ### Phase 7 interview steps
 
@@ -62,6 +63,16 @@ Remember **Baseline → Send → Block → Correlate → Tune**:
 3. **Block:** observe HTTP 403; do not attempt exploitation, bypass, or third-party testing.
 4. **Correlate:** match the UTC window to the terminating rule, encrypted redacted log, WAF metric, alarm, and SNS notification.
 5. **Tune:** discuss false positives, approximate rate enforcement, rule order, and using Count mode before blocking new rules in production.
+
+### Phase 9 interview steps
+
+Remember **Detect → Route → Triage → Correlate → Improve**:
+
+1. **Detect:** GuardDuty finds threats, Config finds drift, and Security Hub CSPM evaluates foundational controls.
+2. **Route:** EventBridge sends filtered actionable events to a separate encrypted security topic, with an encrypted DLQ for failed delivery.
+3. **Triage:** establish whether the event is active or a sample, its severity/type, affected resource, and current workflow state.
+4. **Correlate:** align the UTC window with CloudTrail, Flow Logs, WAF logs, Config history, and application telemetry.
+5. **Improve:** contain or roll back, change Terraform or the runbook, retest, and document the evidence.
 
 ## Design decisions interviewers may ask about
 

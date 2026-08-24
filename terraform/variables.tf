@@ -244,6 +244,18 @@ variable "alert_email" {
   }
 }
 
+variable "security_alert_email" {
+  description = "Optional email endpoint for security findings. Subscription requires confirmation."
+  type        = string
+  default     = null
+  nullable    = true
+
+  validation {
+    condition     = var.security_alert_email == null || can(regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", var.security_alert_email))
+    error_message = "security_alert_email must be null or a syntactically valid email address."
+  }
+}
+
 variable "audit_log_retention_days" {
   description = "Retention period for CloudTrail objects in S3 before permanent expiration."
   type        = number

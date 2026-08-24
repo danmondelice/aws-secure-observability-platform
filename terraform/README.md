@@ -20,6 +20,8 @@ The audit tier captures all VPC accepted and rejected flows in an enriched one-m
 
 The application edge uses a regional AWS WAF web ACL associated with the ALB. AWS-managed SQL injection, core, and known-bad-input rule groups block matching requests before a per-IP one-minute rate rule. Detailed logs retain only blocked requests, redact query strings and authorization headers, disable request sampling, and use the observability KMS key. WAF allowed/blocked metrics, recent blocks, and a blocked-request alarm appear in the operations dashboard.
 
+The security-detection tier enables GuardDuty with S3 data-event, EBS malware, and EC2 runtime-monitoring features. AWS Config continuously records supported resources into the encrypted audit bucket and evaluates seven managed controls covering SSH exposure, EBS/RDS encryption, RDS public access, CloudTrail, Flow Logs, and ALB/WAF association. Security Hub V2 and Security Hub CSPM are enabled, with FSBP selected explicitly. Filtered GuardDuty, Config, and CSPM events route through EventBridge to a dedicated KMS-encrypted security topic; failed target deliveries use an encrypted SQS DLQ and CloudWatch alarms.
+
 With no `certificate_arn`, the disposable lab listener serves HTTP. Supplying a same-Region ACM certificate enables HTTPS and changes HTTP to a permanent redirect. Do not describe the deployment as TLS-protected until that certificate path has been applied and tested.
 
 ## Validate
@@ -35,4 +37,4 @@ Copy `terraform.tfvars.example` to an ignored `terraform.tfvars` only when value
 
 Running `terraform plan` or `terraform apply` requires valid temporary AWS credentials. Review the plan and expected NAT gateway costs before applying.
 
-Also review Multi-AZ RDS, backup storage, KMS, Secrets Manager, CloudWatch Logs, CloudTrail, S3, archival storage, and AWS WAF costs. General-query logging and one-minute VPC Flow Logs are intentionally enabled for this evidence-driven lab and should be adjusted when their diagnostic value does not justify the volume.
+Also review Multi-AZ RDS, backup storage, KMS, Secrets Manager, CloudWatch Logs, CloudTrail, S3, archival storage, AWS WAF, GuardDuty protection plans, AWS Config evaluations, Security Hub CSPM controls, SNS, and SQS costs. These security services continue generating charges while enabled even when the application is idle.
