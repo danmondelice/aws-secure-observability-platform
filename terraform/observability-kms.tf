@@ -41,11 +41,6 @@ data "aws_iam_policy_document" "observability_kms" {
       ]
     }
 
-    condition {
-      test     = "StringEquals"
-      variable = "kms:ViaService"
-      values   = ["logs.${var.aws_region}.amazonaws.com"]
-    }
   }
 }
 

@@ -309,16 +309,15 @@ resource "aws_cloudwatch_dashboard" "operations" {
         }
       },
       {
-        type   = "metric"
+        type   = "alarm"
         x      = 0
         y      = 2
         width  = 24
         height = 4
         properties = {
-          title       = "Alarm status"
-          region      = var.aws_region
-          view        = "timeSeries"
-          annotations = { alarms = local.alarm_arns }
+          title  = "Alarm status"
+          alarms = local.alarm_arns
+          sortBy = "stateUpdatedTimestamp"
         }
       },
       {

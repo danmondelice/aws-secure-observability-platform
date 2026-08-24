@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "security_alerts_kms" {
 
     principals {
       type        = "Service"
-      identifiers = ["sqs.${var.aws_region}.amazonaws.com"]
+      identifiers = ["sqs.amazonaws.com"]
     }
 
     condition {
