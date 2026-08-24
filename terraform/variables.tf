@@ -243,3 +243,25 @@ variable "alert_email" {
     error_message = "alert_email must be null or a syntactically valid email address."
   }
 }
+
+variable "audit_log_retention_days" {
+  description = "Retention period for CloudTrail objects in S3 before permanent expiration."
+  type        = number
+  default     = 365
+
+  validation {
+    condition     = var.audit_log_retention_days >= 90
+    error_message = "audit_log_retention_days must be at least 90 days."
+  }
+}
+
+variable "audit_access_log_retention_days" {
+  description = "Retention period for S3 server access logs written by the audit bucket."
+  type        = number
+  default     = 90
+
+  validation {
+    condition     = var.audit_access_log_retention_days >= 30
+    error_message = "audit_access_log_retention_days must be at least 30 days."
+  }
+}

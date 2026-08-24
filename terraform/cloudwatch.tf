@@ -36,6 +36,8 @@ locals {
     aws_cloudwatch_metric_alarm.rds_cpu.arn,
     aws_cloudwatch_metric_alarm.rds_connections.arn,
     aws_cloudwatch_metric_alarm.rds_free_storage.arn,
+    aws_cloudwatch_metric_alarm.security_group_changes.arn,
+    aws_cloudwatch_metric_alarm.cloudtrail_changes.arn,
   ]
 }
 
@@ -396,6 +398,32 @@ resource "aws_cloudwatch_dashboard" "operations" {
           region = var.aws_region
           view   = "table"
           query  = "SOURCE '${local.application_log_group_name}' | fields @timestamp, level, message, request_id, path, status_code | filter level = 'ERROR' or status_code >= 500 | sort @timestamp desc | limit 50"
+        }
+      },
+      {
+        type   = "log"
+        x      = 0
+        y      = 24
+        width  = 12
+        height = 6
+        properties = {
+          title  = "Recent rejected network flows"
+          region = var.aws_region
+          view   = "table"
+          query  = "SOURCE '${local.flow_log_group_name}' | fields @timestamp, @message | filter @message like / REJECT / | sort @timestamp desc | limit 50"
+        }
+      },
+      {
+        type   = "log"
+        x      = 12
+        y      = 24
+        width  = 12
+        height = 6
+        properties = {
+          title  = "Recent infrastructure changes"
+          region = var.aws_region
+          view   = "table"
+          query  = "SOURCE '${local.cloudtrail_log_group_name}' | fields @timestamp, userIdentity.arn as actor, eventSource, eventName, sourceIPAddress, errorCode | filter eventName like /^(Create|Delete|Update|Modify|Put|Authorize|Revoke|Start|Stop)/ | sort @timestamp desc | limit 50"
         }
       },
     ]

@@ -10,11 +10,11 @@ The project demonstrates more than resource deployment: every material security 
 
 ## Status
 
-Phase 6 — CloudWatch telemetry, dashboard, alarms, and encrypted SNS notifications.
+Phase 7 — VPC Flow Logs and hardened CloudTrail audit logging.
 
 No AWS resources have been created yet.
 
-The current Terraform configuration defines the multi-AZ application platform plus its encrypted logging, metrics, dashboard, alarms, and notification pipeline. It has not been applied to AWS.
+The current Terraform configuration defines the multi-AZ application platform, encrypted operational telemetry, VPC network-flow visibility, and a multi-Region management-event audit trail. It has not been applied to AWS.
 
 ## Planned architecture
 
@@ -67,6 +67,8 @@ Each experiment records:
 See [docs/requirements.md](docs/requirements.md), [docs/control-validation-matrix.md](docs/control-validation-matrix.md), and [ISSUES.md](ISSUES.md).
 
 Use the [interview guide](docs/interview-guide.md) to practice the project story, design decisions, evidence pattern, and questions interviewers are likely to ask.
+
+Use the [network and audit investigation runbook](docs/audit-investigation.md) after deployment to validate CloudTrail delivery, attribute a reversible configuration change, and locate a controlled rejected connection.
 
 ## Local application
 

@@ -16,6 +16,8 @@ The database tier uses private isolated subnets, encrypted MySQL 8.4 Multi-AZ RD
 
 The observability tier installs the CloudWatch Agent on EC2, collects structured application/bootstrap/system logs and aggregate CPU/memory/disk metrics, encrypts log groups with a project KMS key, and displays ALB, ASG, host, RDS, alarm, and error-log views on an eight-hour operations dashboard. M-of-N alarms use explicit missing-data behavior and publish ALARM/OK transitions to a separately encrypted SNS topic.
 
+The audit tier captures all VPC accepted and rejected flows in an enriched one-minute format. A multi-Region CloudTrail records read and write management events plus global-service events, validates log-file integrity, writes to a KMS-encrypted and versioned S3 bucket, and also streams events to CloudWatch Logs. The audit bucket blocks public access, denies non-TLS requests, records server access logs in a separate bucket, transitions records to Glacier Instant Retrieval after 90 days, and defaults to one-year retention. Metric filters alert on security-group changes and CloudTrail configuration changes.
+
 With no `certificate_arn`, the disposable lab listener serves HTTP. Supplying a same-Region ACM certificate enables HTTPS and changes HTTP to a permanent redirect. Do not describe the deployment as TLS-protected until that certificate path has been applied and tested.
 
 ## Validate
@@ -31,4 +33,4 @@ Copy `terraform.tfvars.example` to an ignored `terraform.tfvars` only when value
 
 Running `terraform plan` or `terraform apply` requires valid temporary AWS credentials. Review the plan and expected NAT gateway costs before applying.
 
-Also review Multi-AZ RDS, backup storage, KMS, Secrets Manager, and CloudWatch Logs costs. General-query logging is intentionally enabled for this evidence-driven lab and should be disabled when its diagnostic value does not justify the volume.
+Also review Multi-AZ RDS, backup storage, KMS, Secrets Manager, CloudWatch Logs, CloudTrail, S3, and archival-storage costs. General-query logging and one-minute VPC Flow Logs are intentionally enabled for this evidence-driven lab and should be adjusted when their diagnostic value does not justify the volume.

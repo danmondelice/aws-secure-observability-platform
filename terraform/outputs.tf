@@ -82,3 +82,23 @@ output "operations_topic_arn" {
   description = "Encrypted SNS topic for operational alarm transitions."
   value       = aws_sns_topic.operations.arn
 }
+
+output "cloudtrail_name" {
+  description = "Name of the multi-Region management-event trail."
+  value       = aws_cloudtrail.management.name
+}
+
+output "audit_bucket_name" {
+  description = "S3 bucket containing encrypted CloudTrail log and digest files."
+  value       = aws_s3_bucket.audit.id
+}
+
+output "vpc_flow_log_group_name" {
+  description = "CloudWatch Logs group receiving VPC Flow Logs."
+  value       = aws_cloudwatch_log_group.vpc_flow.name
+}
+
+output "cloudtrail_log_group_name" {
+  description = "CloudWatch Logs group receiving CloudTrail management events."
+  value       = aws_cloudwatch_log_group.cloudtrail.name
+}
